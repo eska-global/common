@@ -1,9 +1,24 @@
-import { Server, ServerOptions } from 'socket.io';
+import io, { Server, ServerOptions as IOServerOptions } from 'socket.io';
 import { ISocketMiddleware } from './middleware';
-import { SYSTEM_HEALTH_SOCKET_CHANNEL } from './config';
-import io from 'socket.io';
+import { ServerOptions as WSServerOptions } from 'ws';
+import { SYSTEM_HEALTH_SOCKET_CHANNEL } from '../server/config';
 
-export abstract class SocketServer {
+export interface SocketInstance {
+    start();
+
+    stop();
+
+}
+
+interface IEmitter {
+    on(event: string, fn: Function): IEmitter;
+    emit<T>(event: string, ...args: Array<T>): IEmitter;
+    close();
+}
+
+export type ServerOptions = IOServerOptions | WSServerOptions;
+
+export abstract class SocketServer<T extends IEmitter> {
 
     readonly port: number;
     readonly config: ServerOptions;
@@ -13,16 +28,17 @@ export abstract class SocketServer {
 
     socket: Server;
 
-    constructor(port: number, config: ServerOptions,  heartbeatRate: number = 0, middleware?: ISocketMiddleware) {
+    constructor(port: number, config: ServerOptions, heartbeatRate: number = 0, middleware?: ISocketMiddleware) {
         this.port = port;
         this.config = config;
         this.middleware = middleware;
+
         if (heartbeatRate) {
             this.enableHeartbeat(heartbeatRate);
         }
     }
 
-    private enableHeartbeat(heartbeatRate: number) {
+    protected enableHeartbeat(heartbeatRate: number) {
         this.heartbeatJob = setInterval(() => {
             this.socket.emit(SYSTEM_HEALTH_SOCKET_CHANNEL, { isAlive: true, date: new Date() });
         }, heartbeatRate);
