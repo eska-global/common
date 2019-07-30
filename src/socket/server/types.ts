@@ -1,34 +1,32 @@
 import io, { Server, ServerOptions as IOServerOptions } from 'socket.io';
 import { ISocketMiddleware } from './middleware';
-import { ServerOptions as WSServerOptions } from 'ws';
 import { SYSTEM_HEALTH_SOCKET_CHANNEL } from '../server/config';
 
-export interface SocketInstance {
-    start();
+export interface SocketRunnable {
+    run();
 
-    stop();
+    shutdown();
 
 }
 
 interface IEmitter {
-    on(event: string, fn: Function): IEmitter;
-    emit<T>(event: string, ...args: Array<T>): IEmitter;
-    close();
+    on(event: string, listener: Function);
+
+    emit(event: string, ...args: any[]);
+
 }
 
-export type ServerOptions = IOServerOptions | WSServerOptions;
-
-export abstract class SocketServer<T extends IEmitter> {
+export abstract class SocketServer<T extends IEmitter, SocketServerOptions> {
 
     readonly port: number;
-    readonly config: ServerOptions;
+    readonly config: SocketServerOptions;
     readonly middleware?: ISocketMiddleware;
 
-    private heartbeatJob: any;
+    protected heartbeatJob: any;
 
-    socket: Server;
+    socket: T;
 
-    constructor(port: number, config: ServerOptions, heartbeatRate: number = 0, middleware?: ISocketMiddleware) {
+    constructor(port: number, config: SocketServerOptions, heartbeatRate: number = 0, middleware?: ISocketMiddleware) {
         this.port = port;
         this.config = config;
         this.middleware = middleware;
@@ -44,6 +42,14 @@ export abstract class SocketServer<T extends IEmitter> {
         }, heartbeatRate);
     }
 
+}
+
+export class SocketIOServer extends SocketServer<Server, IOServerOptions> implements SocketRunnable {
+
+    constructor(port: number, config: SocketIO.ServerOptions, heartbeatRate: number = 0, middleware?: ISocketMiddleware) {
+        super(port, config, heartbeatRate, middleware);
+    }
+
     run() {
         this.socket = io(this.port, this.config);
         console.log('Socket server started successfully');
@@ -57,5 +63,4 @@ export abstract class SocketServer<T extends IEmitter> {
             console.log('Socket server stopped successfully');
         }
     }
-
 }
