@@ -1,0 +1,36 @@
+{
+  "name": "eska-common",
+  "version": "1.0.0",
+  "description": "Libraries and entities for common usage",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "ts-node": "ts-node src/socket/server/types.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eska-global/common.git"
+  },
+  "keywords": [
+    "common"
+  ],
+  "author": "ESKA",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eska-global/common/issues"
+  },
+  "homepage": "https://github.com/eska-global/common#readme",
+  "dependencies": {
+    "@types/node": "^12.6.8",
+    "@types/ws": "^6.0.1",
+    "socket.io": "1.7.2",
+    "socket.io-client": "2.2.0",
+    "ts-node": "^8.2.0",
+    "typescript": "^3.5.3",
+    "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "@types/socket.io": "^2.1.2",
+    "@types/socket.io-client": "^1.4.32"
+  }
+}
