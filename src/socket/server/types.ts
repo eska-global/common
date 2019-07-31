@@ -1,6 +1,6 @@
-import io, { Server, ServerOptions } from 'socket.io';
-import { ISocketMiddleware } from './middleware';
+import { ISocketMiddleware, SocketMiddleware } from './middleware';
 import { SYSTEM_HEALTH_SOCKET_CHANNEL } from '../server/config';
+import { API_CONTAINER } from '../decorator/api';
 
 export interface SocketRunnable {
     run();
@@ -9,27 +9,33 @@ export interface SocketRunnable {
 
 }
 
-interface IEmitter {
+export interface IEmitter {
     on(event: string, listener: Function);
 
     emit(event: string, ...args: any[]);
-
 }
+
+export type AnyFunction = (...args: any[]) => any;
+export type Listeners = Array<{ channel: string, executor: AnyFunction }>;
+export type ApiContainer = { [methodName: string]: AnyFunction };
 
 export abstract class SocketServer<T extends IEmitter, SocketServerOptions> {
 
     readonly port: number;
     readonly config: SocketServerOptions;
-    readonly middleware?: ISocketMiddleware;
+    readonly middleware?: ISocketMiddleware<T>;
 
     protected heartbeatJob: any;
     protected heartbeatRate: number;
 
-    protected listeners: Array<{ channel: string, executor: Function }>;
+    protected listeners: Listeners;
 
     socket: T;
 
-    constructor(port: number, config: SocketServerOptions, heartbeatRate: number = 0, middleware?: ISocketMiddleware) {
+    constructor(port: number,
+                config: SocketServerOptions,
+                heartbeatRate: number = 0,
+                middleware: ISocketMiddleware<T> = new SocketMiddleware(API_CONTAINER, true)) {
         this.port = port;
         this.config = config;
         this.heartbeatRate = heartbeatRate;
@@ -44,7 +50,7 @@ export abstract class SocketServer<T extends IEmitter, SocketServerOptions> {
         }, heartbeatRate);
     }
 
-    public register(channel: string, listener: Function) {
+    public register(channel: string, listener: AnyFunction) {
         this.listeners.push({ channel, executor: listener });
     }
 
@@ -53,38 +59,3 @@ export abstract class SocketServer<T extends IEmitter, SocketServerOptions> {
     }
 
 }
-
-export class SocketIOServer extends SocketServer<Server, ServerOptions> implements SocketRunnable {
-
-    constructor(port: number, config: ServerOptions, heartbeatRate: number = 0, middleware?: ISocketMiddleware) {
-        super(port, config, heartbeatRate, middleware);
-    }
-
-    run() {
-        this.socket = io(this.port, this.config);
-        if (this.heartbeatRate) {
-            this.enableHeartbeat(this.heartbeatRate);
-        }
-        this.socket.on('connection', (socket) =>
-            this.listeners.forEach(listener => socket.on(listener.channel, () => listener.executor)));
-        console.log('Socket server started successfully');
-    }
-
-    shutdown() {
-        console.log('Stopping socket server...');
-        if (this.socket) {
-            clearInterval(this.heartbeatJob);
-            this.socket.close();
-            console.log('Socket server stopped successfully');
-        }
-    }
-}
-
-const server = new SocketIOServer(5000, {
-    serveClient: false,
-    pingTimeout: 5000,
-    pingInterval: 10000,
-});
-
-server.register('HELLO_WORLD', (data: any) => console.log('HELLO WORLD'));
-server.run();

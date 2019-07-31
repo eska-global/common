@@ -6,10 +6,6 @@ export enum MessageType {
     EVENT = 3,
 }
 
-export enum SocketSystemType {
-
-}
-
 export class Message<MessageBody, Code> {
     public code: Code;
     public headers: {
