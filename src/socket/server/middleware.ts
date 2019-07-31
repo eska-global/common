@@ -45,9 +45,7 @@ export class SocketMiddleware<T extends IEmitter> implements ISocketMiddleware<T
     }
 
     applyApi(socket: any) {
-        if (this.enableDefaultListeners) {
-            this.initDefaultListeners(socket);
-        }
+        this.enableDefaultListeners && this.initDefaultListeners(socket);
         initSocketListeners(this.listeners, socket);
     }
 

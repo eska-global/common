@@ -50,10 +50,6 @@ export abstract class SocketServer<T extends IEmitter, SocketServerOptions> {
         }, heartbeatRate);
     }
 
-    public register(channel: string, listener: AnyFunction) {
-        this.listeners.push({ channel, executor: listener });
-    }
-
     public getSocket(): T {
         return this.socket;
     }

@@ -17,7 +17,6 @@ export class SocketIOServer extends SocketServer<Server, ServerOptions> implemen
         this.heartbeatRate && this.enableHeartbeat(this.heartbeatRate);
         this.middleware.socketServer = this.socket;
         this.socket.on('connection', (socket: any) => {
-            initSocketListeners(this.listeners, socket);
             if (this.middleware) {
                 this.middleware.onConnect(socket);
                 this.middleware.applyApi(socket);
