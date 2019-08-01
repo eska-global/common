@@ -1,6 +1,7 @@
-import { ISocketMiddleware, SocketMiddleware } from './middleware';
-import { SYSTEM_HEALTH_SOCKET_CHANNEL } from '../server/config';
-import { API_CONTAINER } from '../decorator/api';
+import { ISocketMiddleware } from '../middleware/middleware';
+import { SYSTEM_HEALTH_SOCKET_CHANNEL } from '../config/config';
+import { Message, MessageType } from '../model/message';
+import { Heartbeat } from '../model/heartbeat';
 
 export interface SocketRunnable {
     run();
@@ -13,6 +14,13 @@ export interface IEmitter {
     on(event: string, listener: Function);
 
     emit(event: string, ...args: any[]);
+
+    close();
+}
+
+export enum SocketType {
+    IO,
+    WEB
 }
 
 export type AnyFunction = (...args: any[]) => any;
@@ -35,7 +43,7 @@ export abstract class SocketServer<T extends IEmitter, SocketServerOptions> {
     constructor(port: number,
                 config: SocketServerOptions,
                 heartbeatRate: number = 0,
-                middleware: ISocketMiddleware<T> = new SocketMiddleware(API_CONTAINER, true)) {
+                middleware: ISocketMiddleware<T>) {
         this.port = port;
         this.config = config;
         this.heartbeatRate = heartbeatRate;
@@ -46,12 +54,23 @@ export abstract class SocketServer<T extends IEmitter, SocketServerOptions> {
 
     protected enableHeartbeat(heartbeatRate: number) {
         this.heartbeatJob = setInterval(() => {
-            this.socket.emit(SYSTEM_HEALTH_SOCKET_CHANNEL, { isAlive: true, date: new Date() });
+            const heartbeatData = new Heartbeat();
+            const heartbeatMessage = new Message(MessageType.EVENT, SYSTEM_HEALTH_SOCKET_CHANNEL, heartbeatData);
+            this.socket.emit(SYSTEM_HEALTH_SOCKET_CHANNEL, heartbeatMessage);
         }, heartbeatRate);
     }
 
     public getSocket(): T {
         return this.socket;
+    }
+
+    shutdown() {
+        console.log('Stopping socket server...');
+        if (this.socket) {
+            clearInterval(this.heartbeatJob);
+            this.socket.close();
+            console.log('Socket server stopped successfully');
+        }
     }
 
 }

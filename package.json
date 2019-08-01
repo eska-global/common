@@ -30,11 +30,13 @@
     "ts-node": "^8.2.0",
     "tslint": "^5.18.0",
     "typescript": "^3.5.3",
-    "uuid": "^3.3.2"
+    "uuid": "^3.3.2",
+    "z-schema": "^4.1.0"
   },
   "devDependencies": {
     "@types/node-fetch": "^2.5.0",
     "@types/socket.io": "^2.1.2",
-    "@types/socket.io-client": "^1.4.32"
+    "@types/socket.io-client": "^1.4.32",
+    "@types/z-schema": "^3.16.32"
   }
 }

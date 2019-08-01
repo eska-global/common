@@ -6,6 +6,7 @@ export class TestController {
 
     constructor() {
         this.getDelegates = this.getDelegates.bind(this);
+        this.test = this.test.bind(this);
     }
 
     @API('GET_DELEGATES')
@@ -17,6 +18,14 @@ export class TestController {
             }
         });
     }
+
+    @API('TEST')
+    public test(message: Message<any, any>): ResponseEntity<string> {
+        return new ResponseEntity({
+            data: 'VITALIK'
+        });
+    }
+
 }
 
 export default new TestController();

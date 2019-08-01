@@ -1,14 +1,14 @@
 import io, { Server, ServerOptions } from 'socket.io';
-import { ISocketMiddleware } from '../middleware';
-import { initSocketListeners } from '../../util';
-import { SocketRunnable, SocketServer } from '../types';
+import { ISocketMiddleware, SocketMiddleware } from '../../middleware/middleware';
+import { SocketRunnable, SocketServer, SocketType } from '../types';
+import { API_CONTAINER } from '../../decorator/api';
 
-export class SocketIOServer extends SocketServer<Server, ServerOptions> implements SocketRunnable {
+export class IOSocketServer extends SocketServer<Server, ServerOptions> implements SocketRunnable {
 
     constructor(port: number,
                 config: ServerOptions,
-                heartbeatRate: number = 0,
-                middleware?: ISocketMiddleware<Server>) {
+                heartbeatRate?,
+                middleware: ISocketMiddleware<Server> = new SocketMiddleware(API_CONTAINER, true, SocketType.IO)) {
         super(port, config, heartbeatRate, middleware);
     }
 
@@ -26,11 +26,6 @@ export class SocketIOServer extends SocketServer<Server, ServerOptions> implemen
     }
 
     shutdown() {
-        console.log('Stopping socket server...');
-        if (this.socket) {
-            clearInterval(this.heartbeatJob);
-            this.socket.close();
-            console.log('Socket server stopped successfully');
-        }
+        super.shutdown();
     }
 }
