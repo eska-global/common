@@ -2,7 +2,8 @@
   "name": "eska-common",
   "version": "1.0.0",
   "description": "Libraries and entities for common usage",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "time-service": "ts-node src/time_service/index.ts"
@@ -37,6 +38,8 @@
     "@types/node-fetch": "^2.5.0",
     "@types/socket.io": "^2.1.2",
     "@types/socket.io-client": "^1.4.32",
-    "@types/z-schema": "^3.16.32"
+    "@types/z-schema": "^3.16.32",
+    "@types/node": "^12.6.8",
+    "@types/ws": "^6.0.1"
   }
 }
