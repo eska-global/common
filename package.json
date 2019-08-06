@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
+    "prebuild": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
     "time-service": "ts-node src/time_service/index.ts"
     "ts-node": "ts-node src/socket/index.ts"
