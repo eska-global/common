@@ -1,6 +1,6 @@
 import { SocketRunnable, SocketServer, SocketType } from '../../server/types';
 import WebSocket, { Server, ServerOptions } from 'ws';
-import { ISocketMiddleware, SocketMiddleware } from '../../middleware/middleware';
+import { DefaultSocketMiddleware as SocketMiddleware, ISocketMiddleware } from '../../middleware/middleware';
 import { API_CONTAINER } from '../../decorator/api';
 import { SYSTEM_HEALTH_SOCKET_CHANNEL } from '../../config/config';
 import { Message, MessageType } from '../../model/message';
@@ -26,15 +26,7 @@ export class WebSocketServer extends SocketServer<Server, ServerOptions> impleme
 
     run() {
         this.socket = new WebSocket.Server({ port: this.port, ...this.config });
-        this.heartbeatRate && this.enableHeartbeat(this.heartbeatRate);
-        this.middleware.socketServer = this.socket;
-        this.socket.on('connection', (socket: any) => {
-            if (this.middleware) {
-                this.middleware.onConnect(socket);
-                this.middleware.applyApi(socket);
-            }
-        });
-        console.log('Socket server started successfully');
+        super.run();
     }
 
     shutdown() {

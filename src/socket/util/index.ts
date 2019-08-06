@@ -8,6 +8,18 @@ export const initSocketListeners = (listeners: Listeners, socket: any) => {
     listeners.length && listeners.forEach(listener => socket.on(listener.channel, listener.executor));
 };
 
+export const onMessage = (message: Message<any, any>, socket: any, type: SocketType) => {
+    const method = API_CONTAINER[message.code];
+    if (method && typeof method === 'function' && message.headers.type === MessageType.REQUEST) {
+        message.body = method(message, socket);
+        message.headers.type = MessageType.RESPONSE;
+        sendData(socket, message, type);
+    } else {
+        const errorMessage = buildErrorMessage(message.headers.id, message.code);
+        sendData(socket, errorMessage, type);
+    }
+};
+
 export const sendData = (socket: any,
                          data: any,
                          socketType: SocketType,
@@ -18,20 +30,7 @@ export const sendData = (socket: any,
 };
 
 
-export const onMessage = (message: Message<any, any>, socket: any, type: SocketType) => {
-    const method = API_CONTAINER[message.code];
-    if (method && typeof method === 'function' && message.headers.type === MessageType.REQUEST) {
-        message.body = method(message, socket);
-        message.headers.type = MessageType.RESPONSE;
-        sendData(socket, message, type);
-    } else {
-        const errors = new ResponseEntity({ errors: ['Invalid request. Request code not found'] });
-        const errorMessage = new Message<ResponseEntity<any>, any>(
-            MessageType.RESPONSE,
-            message.code,
-            errors,
-            message.headers.id
-        );
-        sendData(socket, errorMessage, type);
-    }
+export const buildErrorMessage = (id: string, code: any) => {
+    const errors = new ResponseEntity({ errors: ['Invalid request. Request code not found'] });
+    return new Message<ResponseEntity<any>, any>(MessageType.RESPONSE, code, errors, id);
 };

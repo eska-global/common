@@ -7,8 +7,8 @@
   "scripts": {
     "prebuild": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "time-service": "ts-node src/time_service/index.ts"
     "ts-node": "ts-node src/socket/index.ts"
+    "time-service": "ts-node src/time_service/index.ts"
   },
   "repository": {
     "type": "git",

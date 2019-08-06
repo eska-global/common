@@ -21,7 +21,7 @@ export interface ISocketMiddleware<T> {
 
 }
 
-export class SocketMiddleware<T extends IEmitter> implements ISocketMiddleware<T> {
+export class DefaultSocketMiddleware<T extends IEmitter> implements ISocketMiddleware<T> {
 
     apiMethods: ApiContainer;
     socketServer?: T;

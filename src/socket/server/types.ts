@@ -64,6 +64,18 @@ export abstract class SocketServer<T extends IEmitter, SocketServerOptions> {
         return this.socket;
     }
 
+    run() {
+        this.heartbeatRate && this.enableHeartbeat(this.heartbeatRate);
+        this.middleware.socketServer = this.socket;
+        this.socket.on('connection', (socket: any) => {
+            if (this.middleware) {
+                this.middleware.onConnect(socket);
+                this.middleware.applyApi(socket);
+            }
+        });
+        console.log('Socket server started successfully');
+    }
+
     shutdown() {
         console.log('Stopping socket server...');
         if (this.socket) {
