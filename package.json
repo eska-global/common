@@ -1,5 +1,5 @@
 {
-  "name": "eska-common",
+  "name": "@eska/eska-common",
   "version": "1.0.4",
   "description": "Libraries and entities for common usage",
   "main": "dist/index.js",
