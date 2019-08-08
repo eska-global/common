@@ -7,3 +7,4 @@ export {
     AnyFunction, SocketRunnable, SocketServer,
     ApiContainer
 } from './server/types';
+export { Message, MessageType } from './model/message';
