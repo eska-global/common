@@ -1,6 +1,6 @@
 {
   "name": "@eska/eska-common",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Libraries and entities for common usage",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
