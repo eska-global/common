@@ -5,13 +5,14 @@ import { API_CONTAINER } from '../decorator/api';
 import { ResponseEntity } from '../model/response';
 
 export const initSocketListeners = (listeners: Listeners, socket: any) => {
-    listeners.length && listeners.forEach(listener => socket.on(listener.channel, listener.executor));
+    listeners.length && listeners.forEach(listener =>
+        socket.on(listener.channel, (data: any) => listener.executor(data, socket)));
 };
 
-export const onMessage = (message: Message<any, any>, socket: any, type: SocketType) => {
+export const onMessage = async (message: Message<any, any>, socket: any, type: SocketType) => {
     const method = API_CONTAINER[message.code];
     if (method && typeof method === 'function' && message.headers.type === MessageType.REQUEST) {
-        message.body = method(message, socket);
+        message.body = await method(message, socket);
         message.headers.type = MessageType.RESPONSE;
         sendData(socket, message, type);
     } else {

@@ -59,20 +59,20 @@ export class DefaultSocketMiddleware<T extends IEmitter> implements ISocketMiddl
     }
 
     private initDefaultListeners(socket: any) {
-        socket.on(SOCKET_DEFAULT_MESSAGE_CHANNEL, (data: any) => {
+        socket.on(SOCKET_DEFAULT_MESSAGE_CHANNEL, async (data: any) => {
             if (this.type === SocketType.WEB) {
                 data = JSON.parse(data);
-                this.onWebMessage(data, socket);
+                await this.onWebMessage(data, socket);
             } else {
-                this.onIOMessage(data, socket);
+                await this.onIOMessage(data, socket);
             }
         });
     }
 
     // TODO: context!!!
     @validate(SocketType.IO)
-    private onIOMessage(message: Message<any, any>, socket: any) {
-        onMessage(message, socket, SocketType.IO);
+    private async onIOMessage(message: Message<any, any>, socket: any) {
+        await onMessage(message, socket, SocketType.IO);
     }
 
     @validate(SocketType.WEB)

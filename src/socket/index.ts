@@ -1,4 +1,4 @@
-export { API } from './decorator/api';
+export { API, API_CONTAINER } from './decorator/api';
 export { IOSocketServer } from './server/io';
 export { WebSocketServer } from './server/web';
 export { ISocketMiddleware, DefaultSocketMiddleware } from './middleware/middleware';
