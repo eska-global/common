@@ -1,51 +1,78 @@
-import io, { Server, ServerOptions as IOServerOptions } from 'socket.io';
-import { ISocketMiddleware } from './middleware';
-import { ServerOptions as WSServerOptions } from 'ws';
-import { SYSTEM_HEALTH_SOCKET_CHANNEL } from '../server/config';
+import { ISocketMiddleware } from '../middleware/middleware';
+import { SYSTEM_HEALTH_SOCKET_CHANNEL } from '../config/config';
+import { Message, MessageType } from '../model/message';
+import { Heartbeat } from '../model/heartbeat';
 
-export interface SocketInstance {
-    start();
+export interface SocketRunnable {
+    run();
 
-    stop();
+    shutdown();
 
 }
 
-interface IEmitter {
-    on(event: string, fn: Function): IEmitter;
-    emit<T>(event: string, ...args: Array<T>): IEmitter;
+export interface IEmitter {
+    on(event: string, listener: Function);
+
+    emit(event: string, ...args: any[]);
+
     close();
 }
 
-export type ServerOptions = IOServerOptions | WSServerOptions;
+export enum SocketType {
+    IO,
+    WEB
+}
 
-export abstract class SocketServer<T extends IEmitter> {
+export type AnyFunction = (...args: any[]) => any;
+export type Listeners = Array<{ channel: string, executor: AnyFunction }>;
+export type ApiContainer = { [methodName: string]: AnyFunction };
+
+export abstract class SocketServer<T extends IEmitter, SocketServerOptions> {
 
     readonly port: number;
-    readonly config: ServerOptions;
-    readonly middleware?: ISocketMiddleware;
+    readonly config: SocketServerOptions;
+    readonly middleware?: ISocketMiddleware<T>;
 
-    private heartbeatJob: any;
+    protected heartbeatJob: any;
+    protected heartbeatRate: number;
 
-    socket: Server;
+    protected listeners: Listeners;
 
-    constructor(port: number, config: ServerOptions, heartbeatRate: number = 0, middleware?: ISocketMiddleware) {
+    socket: T;
+
+    constructor(port: number,
+                config: SocketServerOptions,
+                heartbeatRate: number = 0,
+                middleware: ISocketMiddleware<T>) {
         this.port = port;
         this.config = config;
+        this.heartbeatRate = heartbeatRate;
         this.middleware = middleware;
 
-        if (heartbeatRate) {
-            this.enableHeartbeat(heartbeatRate);
-        }
+        this.listeners = [];
     }
 
     protected enableHeartbeat(heartbeatRate: number) {
         this.heartbeatJob = setInterval(() => {
-            this.socket.emit(SYSTEM_HEALTH_SOCKET_CHANNEL, { isAlive: true, date: new Date() });
+            const heartbeatData = new Heartbeat();
+            const heartbeatMessage = new Message(MessageType.EVENT, SYSTEM_HEALTH_SOCKET_CHANNEL, heartbeatData);
+            this.socket.emit(SYSTEM_HEALTH_SOCKET_CHANNEL, heartbeatMessage);
         }, heartbeatRate);
     }
 
+    public getSocket(): T {
+        return this.socket;
+    }
+
     run() {
-        this.socket = io(this.port, this.config);
+        this.heartbeatRate && this.enableHeartbeat(this.heartbeatRate);
+        this.middleware.socketServer = this.socket;
+        this.socket.on('connection', (socket: any) => {
+            if (this.middleware) {
+                this.middleware.onConnect(socket);
+                this.middleware.applyApi(socket);
+            }
+        });
         console.log('Socket server started successfully');
     }
 

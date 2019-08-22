@@ -1,11 +1,13 @@
 {
-  "name": "eska-common",
-  "version": "1.0.0",
+  "name": "@eska/eska-common",
+  "version": "1.0.6",
   "description": "Libraries and entities for common usage",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
+    "prebuild": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "ts-node": "ts-node src/socket/server/types.ts",
+    "ts-node": "ts-node src/socket/index.ts",
     "time-service": "ts-node src/time_service/index.ts"
   },
   "repository": {
@@ -28,12 +30,17 @@
     "socket.io": "1.7.2",
     "socket.io-client": "2.2.0",
     "ts-node": "^8.2.0",
+    "tslint": "^5.18.0",
     "typescript": "^3.5.3",
-    "uuid": "^3.3.2"
+    "uuid": "^3.3.2",
+    "z-schema": "^4.1.0"
   },
   "devDependencies": {
     "@types/node-fetch": "^2.5.0",
     "@types/socket.io": "^2.1.2",
-    "@types/socket.io-client": "^1.4.32"
+    "@types/socket.io-client": "^1.4.32",
+    "@types/z-schema": "^3.16.32",
+    "@types/node": "^12.6.8",
+    "@types/ws": "^6.0.1"
   }
 }
