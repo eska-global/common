@@ -1,5 +1,5 @@
 import Validator from 'z-schema';
-import { HEADER_MESSAGE_SCHEMA, MESSAGE_SCHEMA } from '../validator/schema/message';
+import { HEADER_MESSAGE_SCHEMA, MESSAGE_SCHEMA } from './schema/message';
 import { Message, MessageType } from '../model/message';
 import { ResponseEntity } from '../model/response';
 import { SocketType } from '../server/types';

@@ -1,10 +1,10 @@
 import { AnyFunction, ApiContainer, IEmitter, Listeners, SocketType } from '../server/types';
-import { initSocketListeners, onMessage, sendData } from '../util/index';
+import { initSocketListeners, onMessage, sendData } from '../util';
 import { Message, MessageType } from '../model/message';
 import { SOCKET_DEFAULT_MESSAGE_CHANNEL } from '../config/config';
 import { ResponseEntity } from '../model/response';
 import { API_CONTAINER } from '../decorator/api';
-import { validate } from '../validator/index';
+import { validate } from '../validator';
 
 export interface ISocketMiddleware<T> {
 

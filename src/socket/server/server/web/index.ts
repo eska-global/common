@@ -1,4 +1,4 @@
-import { SocketRunnable, SocketServer, SocketType } from '../../server/types';
+import { SocketRunnable, SocketServer, SocketType } from '../types';
 import WebSocket, { Server, ServerOptions } from 'ws';
 import { DefaultSocketMiddleware as SocketMiddleware, ISocketMiddleware } from '../../middleware/middleware';
 import { API_CONTAINER } from '../../decorator/api';
