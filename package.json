@@ -27,7 +27,7 @@
     "@types/node": "^12.6.8",
     "@types/ws": "^6.0.1",
     "node-fetch": "^2.6.0",
-    "socket.io": "1.7.2",
+    "socket.io": "^2.2.0",
     "socket.io-client": "2.2.0",
     "ts-node": "^8.2.0",
     "tslint": "^5.18.0",
@@ -40,7 +40,7 @@
     "@types/socket.io": "^2.1.2",
     "@types/socket.io-client": "^1.4.32",
     "@types/z-schema": "^3.16.32",
-    "@types/node": "^12.6.8",
+    "@types/node": "^12.7.1",
     "@types/ws": "^6.0.1"
   }
 }
