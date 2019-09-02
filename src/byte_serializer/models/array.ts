@@ -18,11 +18,9 @@ export class BufferArray extends ModelType {
     }
 
     private getBodyLength(value: Array<any>): number {
-        let size = 0;
-        value.forEach(item => {
-            size += this.typeElement.getLength(item);
-        });
-        return size;
+       return value.reduce((size, item) => {
+            return size + this.typeElement.getLength(item);
+        }, 0);
     }
 
     private writeArrayElementTypeId(buffer: Buffer, elementTypeId: number, offset: number): number {
