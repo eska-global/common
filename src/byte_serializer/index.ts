@@ -1,4 +1,4 @@
-import { SchemaName } from './config';
+// import { SchemaName } from './config';
 import { ModelType } from './models/modelType';
 import { BufferTypes } from './types';
 
@@ -8,7 +8,7 @@ export function deserialize(buffer, offset = 0): any {
     return data.value;
 }
 
-export function createBufferObject(data, schema: SchemaName): Buffer {
+export function createBufferObject(data, schema: any): Buffer {
     const object = new BufferTypes.Object(schema);
     return object.create(data);
 }

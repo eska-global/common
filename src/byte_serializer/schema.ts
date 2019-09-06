@@ -1,13 +1,13 @@
-import { SchemaName } from './config';
+// import { SchemaName } from './config';
 
 class Schema {
-    storeScheme: Map<SchemaName, Object>;
+    storeScheme: Map<any, Object>;
 
     constructor() {
         this.storeScheme = new Map();
     }
 
-    add(schemaId: SchemaName, scheme: Object) {
+    add(schemaId: any, scheme: Object) {
         if (!this.storeScheme.has(schemaId)) {
             this.storeScheme.set(schemaId, scheme);
             return true;
@@ -15,7 +15,7 @@ class Schema {
         return false;
     }
 
-    get(schemaId: SchemaName): Object {
+    get(schemaId: any): Object {
         return this.storeScheme.get(schemaId);
     }
 }
