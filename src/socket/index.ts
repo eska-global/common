@@ -8,3 +8,4 @@ export {
     ApiContainer
 } from './server/types';
 export { Message, MessageType } from './model/message';
+export * from './client/io';
