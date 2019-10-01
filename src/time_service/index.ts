@@ -6,7 +6,7 @@ interface TimeService {
 }
 
 // TODO calc delivery time for request
-class TimeServiceClient implements TimeService {
+export class TimeServiceClient implements TimeService {
 
     config?: Config;
     private timeDifference: number;
