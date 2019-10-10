@@ -1,4 +1,4 @@
-import { ResponseEntity } from 'src/socket/model/response';
+import { ResponseEntity } from '../model/response';
 
 export interface IEmitter {
     on(event: string, fn: Function): IEmitter;

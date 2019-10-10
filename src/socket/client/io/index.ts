@@ -1,7 +1,7 @@
-import { ResponseEntity } from 'src/socket/model/response';
-import { DEFAULT_SOCKET_EVENT, DEFAULT_SOCKET_TIMEOUT } from 'src/socket/model/type';
-import { Message, MessageType } from 'src/socket';
-import { ISocketClient, IEmitter } from 'src/socket/client/type';
+import { ResponseEntity } from '../../model/response';
+import { DEFAULT_SOCKET_EVENT, DEFAULT_SOCKET_TIMEOUT } from '../../model/type';
+import { Message, MessageType } from '../..';
+import { ISocketClient, IEmitter } from '../../client/type';
 
 export class IOSocketClient<ActionTypes> implements ISocketClient<ActionTypes, SocketIOClient.Socket> {
     private readonly socket: SocketIOClient.Socket;
