@@ -1,3 +1,5 @@
+import timeService, { TimeServiceClient } from './time_service';
+
 export * from './socket';
-export * from './time_service';
-export * from './byte_serializer';
+export { timeService, TimeServiceClient };
+// export * from './byte_serializer';
