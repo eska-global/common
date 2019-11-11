@@ -1,17 +1,19 @@
-export class Config {
-    PATH: string;
-    PROTOCOL: string;
-    HOST: string;
-    PORT: string;
+import { Configuration } from '../time_service/types';
 
-    constructor() {
-        this.PATH = process.env.TIME_SERVER_PATH || 'getTime';
-        this.PROTOCOL = process.env.TIME_SERVER_PROTOCOL || 'http';
-        this.HOST = process.env.TIME_SERVER_HOST || '0.0.0.0';
-        this.PORT = process.env.TIME_SERVER_PORT || '7015';
+export class Config {
+    path: string;
+    protocol: string;
+    host: string;
+    port: string;
+
+    constructor(configuration: Configuration = {}) {
+        this.path = configuration.path || 'getTime';
+        this.protocol = configuration.protocol || 'http';
+        this.host = configuration.host || '0.0.0.0';
+        this.port = configuration.port || '7015';
     }
 
     get url(): string {
-        return `${this.PROTOCOL}://${this.HOST}:${this.PORT}/${this.PATH}`;
+        return `${this.protocol}://${this.host}:${this.port}/${this.path}`;
     }
 }
