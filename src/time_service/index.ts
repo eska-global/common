@@ -1,11 +1,7 @@
 import fetch from 'node-fetch';
+import { TimeService } from '../time_service/types';
 import { Config } from '../time_service/config';
 
-interface TimeService {
-    getTime(): number;
-}
-
-// TODO calc delivery time for request
 export class TimeServiceClient implements TimeService {
 
     config?: Config;
