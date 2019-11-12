@@ -33,5 +33,3 @@ export class TimeServiceClient implements ITimeServiceClient {
         }
     }
 }
-
-export default new TimeServiceClient();
