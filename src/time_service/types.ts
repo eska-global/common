@@ -1,4 +1,4 @@
-export interface TimeService {
+export interface ITimeServiceClient {
     getTime(): number;
 }
 
@@ -7,4 +7,8 @@ export type Configuration = {
     protocol?: string;
     host?: string;
     port?: string;
+};
+
+export type TimeServiceResponse = {
+    currentTime: number
 };

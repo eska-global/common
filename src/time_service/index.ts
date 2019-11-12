@@ -1,13 +1,14 @@
-import fetch from 'node-fetch';
-import { TimeService } from '../time_service/types';
+import fetch, { AxiosResponse } from 'axios';
 import { Config } from '../time_service/config';
+import { ITimeServiceClient, TimeServiceResponse } from 'src/time_service/types';
 
-export class TimeServiceClient implements TimeService {
+// TODO calc delivery time for request
+export class TimeServiceClient implements ITimeServiceClient {
 
     config?: Config;
     private timeDifference: number;
 
-    constructor( config?: Config ) {
+    constructor(config?: Config) {
         this.config = config || new Config();
         this.timeDifference = 0;
         this.init();
@@ -24,12 +25,12 @@ export class TimeServiceClient implements TimeService {
     }
 
     async getTimeFromServer(): Promise<number> {
-        return await fetch(this.config.url)
-        .then(data => data.json())
-        .then(data => data.currentTime)
-        .catch(error => {
-           return Date.now();
-        });
+        try {
+            const response: AxiosResponse<TimeServiceResponse> = await fetch(this.config.url);
+            return response.data.currentTime;
+        } catch (e) {
+            return Date.now();
+        }
     }
 }
 
