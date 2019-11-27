@@ -14,6 +14,7 @@ import { BufferMap } from './models/map';
 import { BufferSet } from './models/set';
 import { Bool } from './models/boolean';
 import { Number64 } from './models/number64';
+import { Utf8JS } from './models/utf8JS';
 
 export const BufferTypes = {
     Int8,
@@ -32,24 +33,26 @@ export const BufferTypes = {
     Map: BufferMap,
     Boolean: Bool,
     Number64,
+    Utf8JS
 };
 
 export enum BufferTypesId {
-    Int8,
-    Uint8,
-    Int16,
-    Uint16,
-    Int32,
-    Uint32,
-    Uint64,
-    Double,
-    Utf8,
-    BufferArray,
-    BufferObject,
-    BufferSet,
-    BufferMap,
-    Bool,
-    Number64,
+    Int8 = 0,
+    Uint8 = 1,
+    Int16 = 2,
+    Uint16 = 3,
+    Int32 = 4,
+    Uint32 = 5,
+    Uint64 = 6,
+    Double = 7,
+    Utf8 = 8,
+    BufferArray = 9,
+    BufferObject = 10,
+    BufferSet = 11,
+    BufferMap = 12,
+    Bool = 13,
+    Number64 = 14,
+    Utf8JS = 15,
 }
 
 export const mapPrimitiveCode = new Map();
@@ -69,3 +72,4 @@ mapPrimitiveCode.set(BufferTypesId.BufferSet, BufferSet);
 mapPrimitiveCode.set(BufferTypesId.BufferMap, BufferMap);
 mapPrimitiveCode.set(BufferTypesId.Bool, Bool);
 mapPrimitiveCode.set(BufferTypesId.Number64, Number64);
+mapPrimitiveCode.set(BufferTypesId.Utf8JS, Utf8JS);

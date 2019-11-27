@@ -1,6 +1,8 @@
-// import { SchemaName } from './config';
 import { ModelType } from './models/modelType';
 import { BufferTypes } from './types';
+
+export { schemaStore } from './schema';
+export { BufferTypes };
 
 export function deserialize(buffer, offset = 0): any {
     const dynamicBuffer = new BufferTypes.Buffer();
