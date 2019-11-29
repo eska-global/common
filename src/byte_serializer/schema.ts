@@ -1,5 +1,3 @@
-// import { SchemaName } from './config';
-
 class Schema {
     storeScheme: Map<any, Object>;
 
