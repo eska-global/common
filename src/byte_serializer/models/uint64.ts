@@ -1,5 +1,5 @@
 import { ModelType } from './modelType';
-import { BufferTypesId } from 'src/byte_serializer/types';
+import { BufferTypesId } from './../types';
 
 const SIZE = 8;
 const BODY_BINARY_LENGTH = 64;

@@ -1,6 +1,6 @@
 import { ModelType } from './modelType';
 import { schemaStore } from './../schema';
-import { BufferTypesId } from 'src/byte_serializer/types';
+import { BufferTypesId } from './../types';
 
 const HEADER_LENGTH = 1;
 

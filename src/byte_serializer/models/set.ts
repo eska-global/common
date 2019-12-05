@@ -1,6 +1,6 @@
 import { ModelType } from './modelType';
 import { BufferArray } from './array';
-import { BufferTypesId } from 'src/byte_serializer/types';
+import { BufferTypesId } from './../types';
 
 export class BufferSet extends ModelType {
 
